@@ -1,0 +1,186 @@
+{
+  "version": "final_plan.v1",
+  "plan_id": "plan_20260311_001",
+  "created_at": "2026-03-11T08:37:58.401255+00:00",
+  "semantic_plan": {
+    "negotiation_summary": "Mock negotiation output for phase-1 contract validation.",
+    "hard_constraints": [
+      "FAR <= 3.2",
+      "green_ratio >= 0.30",
+      "budget_million <= 900"
+    ],
+    "kpi_summary": {
+      "agreement_rate": 1.0,
+      "deadlock_rate": 0.0,
+      "individual_rationality_rate": 1.0,
+      "pareto_frontier_distance": 0.12,
+      "social_welfare": 0.372264
+    },
+    "fairness": {
+      "individual_rationality_rate": 1.0,
+      "utility_balance_index": 0.87
+    },
+    "pareto": {
+      "distance": 0.12,
+      "frontier_estimation_method": "simulation_surrogate_v1"
+    }
+  },
+  "generation_recipe": {
+    "runtime": {
+      "mode": "local_batch"
+    },
+    "gh_definition": "tower_mix_v3.ghx",
+    "parameter_bounds": {
+      "far": {
+        "min": 2.4,
+        "max": 3.2
+      },
+      "green_ratio": {
+        "min": 0.3,
+        "max": 0.45
+      },
+      "public_space_ratio": {
+        "min": 0.12,
+        "max": 0.26
+      },
+      "podium_height_m": {
+        "min": 12.0,
+        "max": 24.0
+      }
+    },
+    "sampling_strategy": "lhs",
+    "seed": 42,
+    "variant_count": 12,
+    "coordinate_strategy": "dual",
+    "coordinate_context": {
+      "local_crs": {
+        "name": "project_local",
+        "unit": "meter"
+      },
+      "geo_crs": {
+        "epsg": "EPSG:4326"
+      },
+      "geo_origin": {
+        "lon": 121.4737,
+        "lat": 31.2304,
+        "alt": 0.0
+      }
+    }
+  },
+  "selected_variant": {
+    "variant_id": "v_003",
+    "selection_rationale": "Chosen by 3-judge majority vote with tiebreak by average score.",
+    "artifact_refs": {
+      "rhino_3dm": "artifacts/v_003.3dm",
+      "birdview_png": "artifacts/v_003_birdview.png",
+      "siteplan_png": "artifacts/v_003_siteplan.png"
+    },
+    "score_summary": {
+      "winner_method": "majority_vote_then_avg_score_tiebreak",
+      "vote_count": 3,
+      "avg_judge_score": 0.405708
+    }
+  },
+  "candidates_index": {
+    "source_type": "jsonl_path",
+    "path": "design_options.jsonl",
+    "variant_ids": [
+      "v_001",
+      "v_002",
+      "v_003",
+      "v_004",
+      "v_005",
+      "v_006",
+      "v_007",
+      "v_008",
+      "v_009",
+      "v_010",
+      "v_011",
+      "v_012"
+    ]
+  },
+  "selection_trace": {
+    "strategy": "llm_majority_vote_v1",
+    "judges": [
+      {
+        "judge_id": "judge_a",
+        "model": "llm-judge-a-v1",
+        "top_choice": "v_003",
+        "top_score": 0.384351,
+        "reason_summary": "LLM-style holistic assessment with KPI-informed features (fairness, ROI, public space, carbon).",
+        "scores": {
+          "v_001": 0.3371,
+          "v_002": 0.312291,
+          "v_003": 0.384351,
+          "v_004": 0.352826,
+          "v_005": 0.333415,
+          "v_006": 0.377,
+          "v_007": 0.351109,
+          "v_008": 0.323354,
+          "v_009": 0.321696,
+          "v_010": 0.352596,
+          "v_011": 0.347427,
+          "v_012": 0.371803
+        }
+      },
+      {
+        "judge_id": "judge_b",
+        "model": "llm-judge-b-v1",
+        "top_choice": "v_003",
+        "top_score": 0.392771,
+        "reason_summary": "LLM-style holistic assessment with KPI-informed features (fairness, ROI, public space, carbon).",
+        "scores": {
+          "v_001": 0.318832,
+          "v_002": 0.333013,
+          "v_003": 0.392771,
+          "v_004": 0.372346,
+          "v_005": 0.340851,
+          "v_006": 0.376309,
+          "v_007": 0.348156,
+          "v_008": 0.337538,
+          "v_009": 0.326465,
+          "v_010": 0.37809,
+          "v_011": 0.363412,
+          "v_012": 0.367162
+        }
+      },
+      {
+        "judge_id": "judge_c",
+        "model": "llm-judge-c-v1",
+        "top_choice": "v_003",
+        "top_score": 0.440003,
+        "reason_summary": "LLM-style holistic assessment with KPI-informed features (fairness, ROI, public space, carbon).",
+        "scores": {
+          "v_001": 0.376291,
+          "v_002": 0.364202,
+          "v_003": 0.440003,
+          "v_004": 0.389796,
+          "v_005": 0.371114,
+          "v_006": 0.420221,
+          "v_007": 0.371783,
+          "v_008": 0.364841,
+          "v_009": 0.367493,
+          "v_010": 0.415453,
+          "v_011": 0.403136,
+          "v_012": 0.421996
+        }
+      }
+    ],
+    "vote_tally": {
+      "v_001": 0,
+      "v_002": 0,
+      "v_003": 3,
+      "v_004": 0,
+      "v_005": 0,
+      "v_006": 0,
+      "v_007": 0,
+      "v_008": 0,
+      "v_009": 0,
+      "v_010": 0,
+      "v_011": 0,
+      "v_012": 0
+    },
+    "tie_break_applied": false,
+    "final_choice": "v_003"
+  }
+}

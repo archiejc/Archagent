@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archagent.local/schemas/final_plan.v1.schema.json",
+  "title": "Final Plan V1",
+  "type": "object",
+  "required": [
+    "version",
+    "plan_id",
+    "created_at",
+    "semantic_plan",
+    "generation_recipe",
+    "selected_variant",
+    "candidates_index",
+    "selection_trace"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "final_plan.v1"
+    },
+    "plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "semantic_plan": {
+      "type": "object",
+      "required": ["negotiation_summary", "hard_constraints", "kpi_summary", "fairness", "pareto"],
+      "additionalProperties": false,
+      "properties": {
+        "negotiation_summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hard_constraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"}
+        },
+        "kpi_summary": {
+          "type": "object",
+          "required": [
+            "agreement_rate",
+            "deadlock_rate",
+            "individual_rationality_rate",
+            "pareto_frontier_distance",
+            "social_welfare"
+          ],
+          "additionalProperties": true,
+          "properties": {
+            "agreement_rate": {"type": "number"},
+            "deadlock_rate": {"type": "number"},
+            "individual_rationality_rate": {"type": "number"},
+            "pareto_frontier_distance": {"type": "number"},
+            "social_welfare": {"type": "number"}
+          }
+        },
+        "fairness": {
+          "type": "object",
+          "required": ["individual_rationality_rate", "utility_balance_index"],
+          "additionalProperties": true,
+          "properties": {
+            "individual_rationality_rate": {"type": "number"},
+            "utility_balance_index": {"type": "number"}
+          }
+        },
+        "pareto": {
+          "type": "object",
+          "required": ["distance", "frontier_estimation_method"],
+          "additionalProperties": true,
+          "properties": {
+            "distance": {"type": "number"},
+            "frontier_estimation_method": {"type": "string"}
+          }
+        }
+      }
+    },
+    "generation_recipe": {
+      "type": "object",
+      "required": [
+        "runtime",
+        "gh_definition",
+        "parameter_bounds",
+        "sampling_strategy",
+        "seed",
+        "variant_count",
+        "coordinate_strategy",
+        "coordinate_context"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "runtime": {
+          "type": "object",
+          "required": ["mode"],
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "type": "string",
+              "const": "local_batch"
+            }
+          }
+        },
+        "gh_definition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameter_bounds": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["min", "max"],
+            "additionalProperties": false,
+            "properties": {
+              "min": {"type": "number"},
+              "max": {"type": "number"}
+            }
+          }
+        },
+        "sampling_strategy": {
+          "type": "string",
+          "enum": ["lhs", "grid", "random"]
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "variant_count": {
+          "type": "integer",
+          "const": 12
+        },
+        "coordinate_strategy": {
+          "type": "string",
+          "const": "dual"
+        },
+        "coordinate_context": {
+          "type": "object",
+          "required": ["local_crs", "geo_crs", "geo_origin"],
+          "additionalProperties": false,
+          "properties": {
+            "local_crs": {
+              "type": "object",
+              "required": ["name", "unit"],
+              "additionalProperties": false,
+              "properties": {
+                "name": {"type": "string"},
+                "unit": {"type": "string"}
+              }
+            },
+            "geo_crs": {
+              "type": "object",
+              "required": ["epsg"],
+              "additionalProperties": false,
+              "properties": {
+                "epsg": {"type": "string"}
+              }
+            },
+            "geo_origin": {
+              "type": "object",
+              "required": ["lon", "lat", "alt"],
+              "additionalProperties": false,
+              "properties": {
+                "lon": {"type": "number"},
+                "lat": {"type": "number"},
+                "alt": {"type": "number"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "selected_variant": {
+      "type": "object",
+      "required": ["variant_id", "selection_rationale", "artifact_refs", "score_summary"],
+      "additionalProperties": false,
+      "properties": {
+        "variant_id": {
+          "type": "string",
+          "pattern": "^v_[A-Za-z0-9_-]+$"
+        },
+        "selection_rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifact_refs": {
+          "type": "object",
+          "required": ["rhino_3dm", "birdview_png", "siteplan_png"],
+          "additionalProperties": false,
+          "properties": {
+            "rhino_3dm": {"type": "string"},
+            "birdview_png": {"type": "string"},
+            "siteplan_png": {"type": "string"}
+          }
+        },
+        "score_summary": {
+          "type": "object",
+          "required": ["winner_method", "vote_count", "avg_judge_score"],
+          "additionalProperties": false,
+          "properties": {
+            "winner_method": {"type": "string"},
+            "vote_count": {"type": "integer"},
+            "avg_judge_score": {"type": "number"}
+          }
+        }
+      }
+    },
+    "candidates_index": {
+      "type": "object",
+      "required": ["source_type", "variant_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": ["jsonl_path", "inline"]
+        },
+        "path": {
+          "type": "string"
+        },
+        "variant_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^v_[A-Za-z0-9_-]+$"
+          }
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "design_option.v1.schema.json"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"source_type": {"const": "jsonl_path"}}
+          },
+          "then": {
+            "required": ["path"]
+          }
+        },
+        {
+          "if": {
+            "properties": {"source_type": {"const": "inline"}}
+          },
+          "then": {
+            "required": ["entries"]
+          }
+        }
+      ]
+    },
+    "selection_trace": {
+      "type": "object",
+      "required": ["strategy", "judges", "vote_tally", "tie_break_applied", "final_choice"],
+      "additionalProperties": false,
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "const": "llm_majority_vote_v1"
+        },
+        "judges": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["judge_id", "model", "top_choice", "top_score", "reason_summary", "scores"],
+            "additionalProperties": false,
+            "properties": {
+              "judge_id": {"type": "string"},
+              "model": {"type": "string"},
+              "top_choice": {
+                "type": "string",
+                "pattern": "^v_[A-Za-z0-9_-]+$"
+              },
+              "top_score": {"type": "number"},
+              "reason_summary": {"type": "string"},
+              "scores": {
+                "type": "object",
+                "minProperties": 1,
+                "additionalProperties": {"type": "number"}
+              }
+            }
+          }
+        },
+        "vote_tally": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "tie_break_applied": {
+          "type": "boolean"
+        },
+        "final_choice": {
+          "type": "string",
+          "pattern": "^v_[A-Za-z0-9_-]+$"
+        }
+      }
+    }
+  }
+}
